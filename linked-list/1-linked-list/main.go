@@ -80,6 +80,36 @@ func (l *LinkedList) Remove(data interface{}) error {
 	return nil
 }
 
+// 逆順に並び替え(forを使った手法)
+func (l *LinkedList) ReverseIterative() {
+	var prev *Node
+	for current := l.head; current != nil; {
+		next := current.next
+		current.next = prev
+
+		prev = current
+		current = next
+	}
+	l.head = prev
+}
+
+// 逆順に並び替え(再帰を使った手法)
+func (l *LinkedList) ReverseRecursive() {
+	var fn func(current, prev *Node) *Node
+	fn = func(current, prev *Node) *Node {
+		if current == nil {
+			return prev
+		}
+		next := current.next
+		current.next = prev
+		prev = current
+		current = next
+		return fn(current, prev)
+	}
+
+	l.head = fn(l.head, nil)
+}
+
 func (l *LinkedList) Print() {
 	for cur := l.head; cur != nil; {
 		if cur.next != nil {
@@ -97,5 +127,9 @@ func main() {
 	list.Append(2)
 	list.Append(3)
 	list.Insert(0)
+	list.Print()
+	list.ReverseIterative()
+	list.Print()
+	list.ReverseRecursive()
 	list.Print()
 }
